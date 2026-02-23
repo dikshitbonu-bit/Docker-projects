@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TODO App - DevOps Project</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            padding: 30px;
+        }
+        
+        h1 {
+            color: #667eea;
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 0.9em;
+        }
+        
+        .add-task {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+        
+        input[type="text"] {
+            flex: 1;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        button {
+            padding: 15px 30px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        button:hover {
+            background: #5568d3;
+        }
+        
+        .tasks-list {
+            list-style: none;
+        }
+        
+        .task-item {
+            background: #f8f9fa;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: transform 0.2s;
+        }
+        
+        .task-item:hover {
+            transform: translateX(5px);
+            background: #e9ecef;
+        }
+        
+        .task-text {
+            flex: 1;
+            font-size: 16px;
+            color: #333;
+        }
+        
+        .task-time {
+            font-size: 12px;
+            color: #999;
+            margin-right: 15px;
+        }
+        
+        .delete-btn {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.3s;
+        }
+        
+        .delete-btn:hover {
+            background: #c82333;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #999;
+        }
+        
+        .empty-state p {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+        
+        .stats {
+            text-align: center;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📝 TODO App</h1>
+        <p class="subtitle">Two-Tier Flask + MySQL Architecture</p>
+        
+        <form action="/add" method="POST" class="add-task">
+            <input type="text" name="task" placeholder="What needs to be done?" required>
+            <button type="submit">Add Task</button>
+        </form>
+        
+        {% if tasks %}
+            <ul class="tasks-list">
+                {% for task in tasks %}
+                <li class="task-item">
+                    <span class="task-text">{{ task.task }}</span>
+                    <span class="task-time">{{ task.created_at.strftime('%b %d, %Y %I:%M %p') }}</span>
+                    <a href="/delete/{{ task.id }}">
+                        <button class="delete-btn">Delete</button>
+                    </a>
+                </li>
+                {% endfor %}
+            </ul>
+            
+            <div class="stats">
+                <strong>Total Tasks: {{ tasks|length }}</strong>
+            </div>
+        {% else %}
+            <div class="empty-state">
+                <p>🎉 No tasks yet!</p>
+                <p style="font-size: 14px;">Add your first task above to get started.</p>
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>
