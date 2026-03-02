@@ -26,7 +26,7 @@ A simple and elegant Todo application built with Flask and MySQL, fully containe
 python-todo-app/
 ├── app.py                 # Main Flask application
 ├── requirements.txt       # Python dependencies
-├── Dockerfile            # Docker image configuration
+├── Dockerfile            # Multi-stage Docker build
 ├── docker-compose.yml    # Multi-container setup
 ├── .env.example          # Environment variables template
 ├── .gitignore           # Git ignore rules
@@ -34,6 +34,27 @@ python-todo-app/
 │   └── index.html       # Frontend template
 └── README.md            # This file
 ```
+
+## Docker Multi-Stage Build 🐳
+
+The Dockerfile uses a **multi-stage build** approach to create an optimized, smaller final image:
+
+**Build Stage** (`builder`):
+- Uses `python:3.12-slim` as the base
+- Installs all Python dependencies from `requirements.txt`
+- Dependencies are cached in `/app/deps` directory
+
+**Final Stage**:
+- Starts with a fresh `python:3.12-slim` image
+- Copies only the compiled dependencies from the builder stage
+- Copies application code
+- Sets `PYTHONPATH=/app/deps` for Python to find dependencies
+- Exposes port 5000 and runs the Flask app
+
+**Benefits**:
+- ✨ Smaller final image size (dependencies cached separately)
+- 🚀 Faster rebuilds when code changes (dependency layer reused)
+- 🔒 Cleaner production image (no build tools or temporary files)
 
 ## Prerequisites 📋
 
